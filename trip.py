@@ -2,6 +2,8 @@ from linkedList import LinkedList
 
 class Trip:
     def __init__(self, tripName, totalReembursment):
+        self.travelModeDict = {}
+
         self.totalReembursment = totalReembursment
         self.tripName = tripName
 
@@ -9,6 +11,8 @@ class Trip:
         self.remainingBudget = totalReembursment
         self.overDraft = 0
         self.index = 0
+
+
 
     def addExpense(self, expense):
         self.expenseList.append(expense)
@@ -35,6 +39,10 @@ class Trip:
         for expense in self.expenseList:
             if expense.canBeReembursed:
                 totalCost += expense.ammount
+                if expense.modeOfTransport in self.travelModeDict:
+                    self.travelModeDict[expense.modeOfTransport] += expense.ammount
+                else:
+                    self.travelModeDict[expense.modeOfTransport] = expense.ammount
             else:
                 self.overDraft += expense.ammount
         if totalCost > self.totalReembursment:
@@ -45,22 +53,27 @@ class Trip:
         if (self.remainingBudget < 0):
             self.remainingBudget = 0;
 
+
     def displaySummary(self):
         self.updateSummary()
-
-        print(f" - Trip's {self.tripName} summary:")
+        totalSpent = self.totalReembursment-self.remainingBudget
+        print(f"  ---  Trip's '{self.tripName}' summary:  ---")
         print(f"Remaining budget: {self.remainingBudget} Eur")
         print(f"Overdraft: {self.overDraft} Eur")
-        print(f"(spent {self.totalReembursment-self.remainingBudget} of {self.totalReembursment} Eur)")
-        print("")
+        print(f"(spent {totalSpent} of reimbursable {self.totalReembursment} Eur)")
+        print(" - Cost split for final form:")
+        for transport, cost in self.travelModeDict.items():
+            print(f"{transport.capitalize()} - {round(cost/(totalSpent + self.overDraft), 2) *100}% of total spendigs ({cost} Eur).")
 
 
 class Expense:
-    def __init__(self, ammount, modeOfTransport, canBeReembursed = "true", notes = ""):
+    def __init__(self, ammount, modeOfTransport, canBeReembursed = "default", notes = ""):
         if (canBeReembursed.lower() in ["true", "yes", "can", "y"]):
             self.canBeReembursed = True
         elif canBeReembursed.lower in ["false", "no", "can not", "can't", "n"]:
             self.canBeReembursed = False
+        elif canBeReembursed == "default":
+                self.canBeReembursed = modeOfTransport not in ["taxi", "bolt", "uber"]
         else:
             raise ValueError
 
