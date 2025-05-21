@@ -3,7 +3,7 @@ def doStartingPromt():
     print("Travel reimbursement calculator for Erasmus+ projects")
     print("*****************************************************")
     print("")
-    print("Izmanto 'help', lai redzētu pieejamās komandas")
+    print("Use 'help', to see available commands.")
 
 def doHelpPromt():
     print("\n--- Help Menu: List of All Commands ---\n")
@@ -23,7 +23,7 @@ def doHelpPromt():
     print("deselect")
     print("    Deselects the currently selected trip.\n")
 
-    print("show trip")
+    print("show summary")
     print("    Displays a summary of the selected trip.\n")
 
     print("show expenses")
