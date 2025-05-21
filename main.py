@@ -54,7 +54,7 @@ while True:
     elif command == "deselect":
         currentTripSelection = -1
 
-    elif command == "show trip":
+    elif command == "show summary":
         tripList[currentTripSelection - 1].displaySummary()
 
     elif command == "show expenses":
